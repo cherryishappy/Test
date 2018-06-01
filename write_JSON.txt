@@ -1,0 +1,186 @@
+import org.json.JSONArray;
+import org.json.JSONObject;
+	public String JsonLinksWrite(NameMenuModel modelSet ,ArrayList<ThaiSquare_menuModel>  ArrTsqMenuAll) {
+				
+		ArrayList<ThaiSquare_menuModel> ArrLinks = new ArrayList<ThaiSquare_menuModel>();
+		ThaiSquare_menuModel linksModel = new ThaiSquare_menuModel();
+		JSONArray list = new JSONArray();
+		JSONObject obj = new JSONObject();
+		String StrMenuNo = modelSet.getMENU_NO()==null?"":modelSet.getMENU_NO().trim();
+		String StrSubMenuNo1 = modelSet.getNameSUBMENU_NO1()==null?"":modelSet.getNameSUBMENU_NO1().trim();
+		ThaiSquare_menuModel modelTsqMenuAll = new ThaiSquare_menuModel();
+		ThaiSquare_menuModel model = new ThaiSquare_menuModel();
+		
+		if(StrMenuNo.equals("")&&StrSubMenuNo1.equals("")){
+
+			ArrLinks = new ArrayList<ThaiSquare_menuModel>();
+			for(int i =0;i<ArrTsqMenuAll.size();i++){
+				modelTsqMenuAll = ArrTsqMenuAll.get(i);
+				if((!modelTsqMenuAll.getMENU_TYPE().equals("00"))&&(modelTsqMenuAll.getMENU_ID().equalsIgnoreCase("IND001"))){
+					 model = new ThaiSquare_menuModel();				        
+					 model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+					 model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+					 ArrLinks.add(model);
+				}
+			}
+						
+		}else{
+		
+			Map<String,String> MenuNomap=new HashMap<String,String>();	
+			Map<String,String> SubMenuNo1map=new HashMap<String,String>();
+
+			String[] myMenuNo = new String[100];
+			String[] mySubMenuNo1 = new String[100];
+			String chkTC ="";
+			
+			ArrLinks = new ArrayList<ThaiSquare_menuModel>();
+			for(int i =0;i<ArrTsqMenuAll.size();i++){
+				modelTsqMenuAll = ArrTsqMenuAll.get(i);
+				if((!modelTsqMenuAll.getMENU_TYPE().equals("00"))&&(modelTsqMenuAll.getMENU_ID().equalsIgnoreCase("IND001"))){
+					 
+					if(StrMenuNo.length()>0){
+						if(StrMenuNo.indexOf(",")!=-1){
+							myMenuNo = StrMenuNo.split("\\,");					  
+							int size_myMenuNo = myMenuNo.length;
+							MenuNomap=new HashMap<String,String>();	
+							for(int x=0;x<size_myMenuNo;x++){
+								MenuNomap.put(myMenuNo[x], myMenuNo[x]);									
+							}
+								if(StrSubMenuNo1.length()>0){
+									if(StrSubMenuNo1.indexOf(",")!=-1){
+										mySubMenuNo1 = StrSubMenuNo1.split("\\,");					  
+										int size_mySubMenuNo1 = mySubMenuNo1.length;
+										SubMenuNo1map =new HashMap<String,String>();
+										for(int y=0;y<size_mySubMenuNo1;y++){
+											SubMenuNo1map.put(mySubMenuNo1[y], mySubMenuNo1[y]);
+										}
+											if(!MenuNomap.containsValue(modelTsqMenuAll.getMENU_NO())){											
+												if(!SubMenuNo1map.containsValue(modelTsqMenuAll.getSUBMENU_NO1())){
+													chkTC ="T,T,.../H,H,...";
+													model = new ThaiSquare_menuModel();				        
+													model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+													model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+													ArrLinks.add(model);
+												}
+											 }
+										
+									}else{
+										if(!MenuNomap.containsValue(modelTsqMenuAll.getMENU_NO())){ 												    	
+											if(!StrSubMenuNo1.equalsIgnoreCase(modelTsqMenuAll.getSUBMENU_NO1())){
+												chkTC ="T,T,.../H";
+												model = new ThaiSquare_menuModel();				        
+												model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+												model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+												ArrLinks.add(model);
+											}
+										 }
+									}
+								}else{
+									if(!MenuNomap.containsValue(modelTsqMenuAll.getMENU_NO())){
+										   chkTC ="T,T,...";
+										   model = new ThaiSquare_menuModel();				        
+										   model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+										   model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+										   ArrLinks.add(model);
+									    }
+								}
+						}else{
+							if(StrSubMenuNo1.length()>0){
+								if(StrSubMenuNo1.indexOf(",")!=-1){
+									mySubMenuNo1 = StrSubMenuNo1.split("\\,");					  
+									int size_mySubMenuNo1 = mySubMenuNo1.length;
+									SubMenuNo1map =new HashMap<String,String>();
+									for(int y=0;y<size_mySubMenuNo1;y++){
+										SubMenuNo1map.put(mySubMenuNo1[y], mySubMenuNo1[y]);
+									}
+									if(!StrMenuNo.equalsIgnoreCase(modelTsqMenuAll.getMENU_NO())){
+											if(!SubMenuNo1map.containsValue(modelTsqMenuAll.getSUBMENU_NO1())){
+												chkTC ="T/H,H,...";
+												model = new ThaiSquare_menuModel();				        
+												model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+												model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+												ArrLinks.add(model);
+											}
+										}
+																				
+								}else{
+									if(!StrMenuNo.equalsIgnoreCase(modelTsqMenuAll.getMENU_NO())){
+										if(!StrSubMenuNo1.equalsIgnoreCase(modelTsqMenuAll.getSUBMENU_NO1())){
+											chkTC ="T/H";
+											model = new ThaiSquare_menuModel();				        
+											model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+											model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+											ArrLinks.add(model);
+										}
+									}
+								}
+							}else{
+								if(!StrMenuNo.equalsIgnoreCase(modelTsqMenuAll.getMENU_NO())){
+								    chkTC ="T";
+								    model = new ThaiSquare_menuModel();				        
+									model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+									model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+									ArrLinks.add(model);
+								}
+							}
+						}	
+					}else if(StrSubMenuNo1.length()>0){
+						if(StrSubMenuNo1.indexOf(",")!=-1){
+							mySubMenuNo1 = StrSubMenuNo1.split("\\,");					  
+							int size_mySubMenuNo1 = mySubMenuNo1.length;
+							SubMenuNo1map =new HashMap<String,String>();
+							for(int y=0;y<size_mySubMenuNo1;y++){
+								SubMenuNo1map.put(mySubMenuNo1[y], mySubMenuNo1[y]);
+							}
+							if(!SubMenuNo1map.containsValue(modelTsqMenuAll.getSUBMENU_NO1())){
+									 chkTC ="H,H,...";
+									 model = new ThaiSquare_menuModel();				        
+									 model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+									 model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+									 ArrLinks.add(model);
+															
+							}
+							
+						}else{								
+							if(!StrSubMenuNo1.equalsIgnoreCase(modelTsqMenuAll.getSUBMENU_NO1())){
+								chkTC ="H";
+								model = new ThaiSquare_menuModel();				        
+								model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+								model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+								ArrLinks.add(model);
+							}
+						}
+					}else{								
+						chkTC ="no T no H";
+						model = new ThaiSquare_menuModel();				        
+						model.setMENU_NAME(modelTsqMenuAll.getMENU_NAME());     
+						model.setMENU_LINK(modelTsqMenuAll.getMENU_LINK());                                        				
+						ArrLinks.add(model);
+					}				        					 
+				}
+			}
+			
+		}
+				
+			 obj = new JSONObject();
+			 list = new JSONArray();
+			 JSONObject info= new JSONObject();
+			 try {							
+				for(int i=0;i<ArrLinks.size();i++){
+					 linksModel = new ThaiSquare_menuModel();
+					 info = new JSONObject();
+					 linksModel = ArrLinks.get(i);
+					 info.put("value", formatString(linksModel.getMENU_LINK()));
+					 info.put("label", formatString(linksModel.getMENU_NAME()));
+					 list.put(info);
+				}			
+				obj.put("linkAll", list);
+			 } catch (Exception e) {
+					System.out.println("ERROR JSON::"+e.getMessage());
+			 }
+							
+	    String StrObj = obj.toString();
+	    String myStrObj = StrObj.replaceAll("\"","'");
+	    
+	    return myStrObj;
+	}
